@@ -64,7 +64,11 @@ function! s:sectionHeadingType()
 
     let lines = join(getline('.', line('.')+2), "\n")
     let results = matchlist(lines, s:REGEXP_ALL_HEADINGS)
+
     if !empty(results)
+        if empty(results[1])
+            return results[2]
+        endif
         return results[1]
     endif
     return ''
