@@ -42,7 +42,7 @@ function! s:isSectionHeading()
     let savePos = getpos('.')
 
     let ret = search(s:REGEXP_ALL_HEADINGS, 'Wnc', line('.'))
-    if ret
+    if ret && line('.') != 1
         " Search a line behind the current, just to make sure we aren't
         " partially matching a section heading.
         call cursor(line('.')-1, 0)
@@ -96,10 +96,10 @@ function! s:searchForHeading(direction)
         return 0
     endif
 
-    if a:direction == 0
+    if a:direction == 0 && lineNr > 1
         " Check to see if the can match an overline heading
         call cursor(lineNr - 1, 0)
-        if lineNr > 1 && s:isSectionHeading()
+        if s:isSectionHeading()
             let lineNr = lineNr - 1
         else
             call cursor(lineNr, 0)
