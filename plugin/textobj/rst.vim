@@ -264,6 +264,34 @@ function! s:move_P()
 endfunction
 
 
+function! s:counted_move_n()
+    for i in range(v:count1)
+        call s:move_n()
+    endfor
+endfunction
+
+
+function! s:counted_move_N()
+    for i in range(v:count1)
+        call s:move_N()
+    endfor
+endfunction
+
+
+function! s:counted_move_p()
+    for i in range(v:count1)
+        call s:move_p()
+    endfor
+endfunction
+
+
+function! s:counted_move_P()
+    for i in range(v:count1)
+        call s:move_P()
+    endfor
+endfunction
+
+
 call textobj#user#plugin('rst', {
             \       'sections': {
             \           '*sfile*': expand('<sfile>:p'),
@@ -278,7 +306,7 @@ call textobj#user#plugin('rst', {
 function! s:setupTextobjRstMappings()
     let cmd = 'silent! %snoremap ' .
                 \ '<Plug>(textobj-rst-sections-%s) ' .
-                \ ':<C-U>call <SID>move_%s()<CR>'
+                \ ':<C-U>call <SID>counted_move_%s()<CR>'
     for m in ['n', 'x', 'o']
         for n in ['n', 'N', 'p', 'P']
             execute printf(cmd, m, n, n)
