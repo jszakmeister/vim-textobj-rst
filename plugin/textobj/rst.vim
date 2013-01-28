@@ -111,6 +111,11 @@ function! s:findSectionHeader(direction)
 
     call setpos('.', [curPos[0], curPos[1], 0, 0])
 
+    " Prevent matching an overline heading twice.
+    if a:direction == 1 && s:isSectionHeading()
+        call cursor(line('.') + 1, 0)
+    endif
+
     let lineNr = s:searchForHeading(a:direction)
 
     if lineNr == 0
@@ -118,6 +123,7 @@ function! s:findSectionHeader(direction)
         return 0
     endif
 
+    normal zz
     return 1
 endfunction
 
@@ -208,15 +214,74 @@ function! s:select_i_section()
 endfunction
 
 
+function! s:move_n()
+    call s:findSectionHeader(1)
+endfunction
+
+
+function! s:move_N()
+    let lineNr = line('.')
+
+    if s:findSectionHeader(1)
+        if lineNr == line('.') - 1
+            if s:findSectionHeader(1)
+                normal k$zz
+            else
+                normal G$zz
+            endif
+        else
+            normal k$zz
+        endif
+    else
+        normal G$zz
+    endif
+endfunction
+
+
+function! s:move_p()
+    call s:findSectionHeader(0)
+endfunction
+
+
+function! s:move_P()
+    if s:isSectionHeading()
+        silent! normal k$zz
+        return
+    endif
+
+    let savePos = getpos('.')
+
+    if s:findSectionHeader(0) && s:findSectionHeader(0) && s:findSectionHeader(1)
+        silent! normal k$zz
+        return
+    endif
+
+    call setpos('.', savePos)
+endfunction
+
+
 call textobj#user#plugin('rst', {
-\      'sections': {
-\          '*sfile*': expand('<sfile>:p'),
-\          'select-a': 'as',
-\          '*select-a-function*': 's:select_a_section',
-\          'select-i': 'is',
-\          '*select-i-function*': 's:select_i_section',
-\      },
-\    })
+            \       'sections': {
+            \           '*sfile*': expand('<sfile>:p'),
+            \           'select-a': 'as',
+            \           '*select-a-function*': 's:select_a_section',
+            \           'select-i': 'is',
+            \           '*select-i-function*': 's:select_i_section',
+            \       },
+            \   })
+
+
+function! s:setupTextobjRstMappings()
+    let cmd = 'silent! %snoremap ' .
+                \ '<Plug>(textobj-rst-sections-%s) ' .
+                \ ':<C-U>call <SID>move_%s()<CR>'
+    for m in ['n', 'x', 'o']
+        for n in ['n', 'N', 'p', 'P']
+            execute printf(cmd, m, n, n)
+        endfor
+    endfor
+endfunction
+call s:setupTextobjRstMappings()
 
 
 let g:loaded_textobj_rst = 1
