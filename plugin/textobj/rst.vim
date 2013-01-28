@@ -138,14 +138,14 @@ function! s:select_a_section()
     endif
 
     let b = getpos('.')
+
     let sectType = s:sectionHeadingType()
 
     if search(s:REGEXP_ALL_HEADINGS, 'W') == 0
-        echomsg "no match"
-        return 0
+        let currentSectType = ''
+    else
+        let currentSectType = s:sectionHeadingType()
     endif
-
-    let currentSectType = s:sectionHeadingType()
 
     if currentSectType == sectType
         " End the match on the previous line.
