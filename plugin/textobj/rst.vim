@@ -2,7 +2,7 @@
 " File:         rst.vim
 " Description:  Text objects for reStructuredText
 " Maintainer:   John Szakmeister <john@szakmeister.net>
-" Version:      0.2.0-dev
+" Version:      0.2.0
 " License:      Same license as Vim.
 " ============================================================================
 
