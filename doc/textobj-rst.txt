@@ -30,8 +30,8 @@ operator pending mode:
 * |[]| - Jump to the end of the previous section.
 * |][| - Jump to the end of the next section.
 
-To select an entire section, use 'vas'.  To select everything in the section,
-minus the section heading, use 'vis'.
+To select an entire section, use 'vars'.  To select everything in the section,
+minus the section heading, use 'virs'.
 
 The mappings are buffer-local and only get set for the 'rst' FileType.
 
@@ -50,7 +50,7 @@ the following order:
 - quotes (")
 
 The hierarchy is used to select the entire block.  For instance, having the
-cursor in a top-level section and then typing 'vas' will select the entire
+cursor in a top-level section and then typing 'vars' will select the entire
 section, including all sub-sections.
 
 ==============================================================================

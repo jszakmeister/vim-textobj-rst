@@ -291,6 +291,8 @@ function! s:counted_move_P()
     endfor
 endfunction
 
+" Prevent textobj-user from inserting global mappings.
+let g:textobj_rst_no_default_key_mappings = 1
 
 call textobj#user#plugin('rst', {
             \       'sections': {
